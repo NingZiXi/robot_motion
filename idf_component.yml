@@ -1,0 +1,11 @@
+version: 1.0.0
+license: "MIT"
+description: robot_motion is a library for controlling the motion of a robot using ESP-IDF.
+url: https://github.com/NingZiXi/robot_motion
+files:
+  exclude:
+  - .git
+dependencies:
+  idf:
+    version: ">=5.3.1"
+    espressif/servo: ^0.1.0
