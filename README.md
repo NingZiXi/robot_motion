@@ -1,8 +1,8 @@
 ![alt text](image.jpg)
-<h1 align="center">🤖 ESP32 机器人运动控制组件</h1>
+<h1 align="center">🤖 ESP32 Robot Motion</h1>
 
 <p align="center">
-一个让ESP32轻松控制多舵机运动的组件<br/>
+RobotMotion是一个让ESP32轻松控制多舵机运动的组件<br/>
 支持单舵机和多舵机并行控制<br/>
 提供平滑的运动曲线和动作序列功能
 </p>
@@ -36,52 +36,72 @@
 </p>
 
 ---
+## 🚀 简介
 
+**RobotMotion** 是一个专为ESP32设计的轻量级多舵机运动控制库✨，通过简洁的API接口实现单舵机和多舵机的平滑运动控制。支持**动作序列编程**和**JSON配置**，可轻松与Coze等大模型平台集成，通过 **Function Calling(函数调用)** 实现智能体直接控制舵机运动，非常适用于智能玩具🧸、机器人🤖等AIoT应用场景。
 
-## 快速开始
+## 🛠️ 快速开始
+## 📥 克隆项目
 
-### 1️⃣初始化舵机
+要将组件添加到项目中请在IDF终端执行下方命令:
+
+```bash
+idf.py add-dependency "ningzixi/robot_motion^1.0.0"
+```
+
+或者直接克隆本仓库到项目`components`目录下:
+
+```bash
+git clone https://github.com/NingZiXi/robot_motion
+```
+
+## 💻 基本用法
+
+## 1️⃣初始化配置
 ```c
-    servo_config_t servo_cfg = {
-        .max_angle = 180,
-        .min_width_us = 500,
-        .max_width_us = 2500,
-        .freq = 50,
-        .timer_number = LEDC_TIMER_0,
-        .channels = {
-            .servo_pin = {
-                GPIO_NUM_18, GPIO_NUM_19, GPIO_NUM_21, GPIO_NUM_22,
-            },
-            .ch = {
-                LEDC_CHANNEL_0,
-                LEDC_CHANNEL_1,
-                LEDC_CHANNEL_2,
-                LEDC_CHANNEL_3,
-            },
+#include "iot_servo.h"
+#include "robot_motion.h"
+
+// 舵机初始化
+servo_config_t servo_cfg = {
+    .max_angle = 180,
+    .min_width_us = 500,
+    .max_width_us = 2500,
+    .freq = 50,
+    .timer_number = LEDC_TIMER_0,
+    .channels = {
+        .servo_pin = {
+            GPIO_NUM_18, GPIO_NUM_19, GPIO_NUM_21, GPIO_NUM_22,
         },
-        .channel_number = 4,
-    };
-    
-    ESP_ERROR_CHECK(iot_servo_init(LEDC_LOW_SPEED_MODE, &servo_cfg_ls));
+        .ch = {
+            LEDC_CHANNEL_0,
+            LEDC_CHANNEL_1,
+            LEDC_CHANNEL_2,
+            LEDC_CHANNEL_3,
+        },
+    },
+    .channel_number = 4,
+};
+
+ESP_ERROR_CHECK(iot_servo_init(LEDC_LOW_SPEED_MODE, &servo_cfg_ls));
+
+// 运动控制器初始化
+motion_ctrl_t controller;
+motion_init(&controller);
 ```
-### 2️⃣初始化运动控制器
+## 2️⃣基本运动控制
+
 ```c
-    motion_ctrl_t controller;
-    motion_init(&controller);
+// 单舵机运动 (通道0转到90度，耗时1秒)
+motion_add_single(&controller, 0, 90.0f, 1000);
+
+// 多舵机并行运动 (3个舵机同时运动)
+uint8_t channels[] = {0,1,2};
+float angles[] = {45.0f, 60.0f, 30.0f};
+motion_add_parallel(&controller, 3, channels, angles, 1500);
 ```
-
-### 添加运动命令
-
-```c
-// 单舵机运动
-motion_add_single(&controller, 0, 90.0f, 1000); // 通道0转到90度，耗时1秒
-
-// 多舵机并行运动
-uint8_t channels[] = {0,1,2}; // 通道0,1,2
-float angles[] = {45.0f, 60.0f, 30.0f}; // 通道0转到45度，通道1转到60度，通道2转到30度
-motion_add_parallel(&controller, 3, channels, angles, 1500);  // 三个舵机并行运动，耗时1.5秒
-```
-### 执行数组动作序列
+## 3️⃣高级功能
+### 🎭动作序列执行
 ```c
 // 预设动作序列
 motion_sequence_t sequence_demo[] = {
@@ -101,7 +121,7 @@ motion_exec_sequence(&controller, sequence_demo, sizeof(sequence_demo) / sizeof(
 
 使用`motion_exec_sequence`会自动按照顺序执行动作序列，直到所有动作执行完毕。
 
-### 执行JSON动作序列
+### 📋执行JSON动作序列
 
 #### 默认JSON格式 (详细字段名)
 ```c
@@ -162,7 +182,7 @@ motion_exec_sequence(&controller, sequence_demo, sizeof(sequence_demo) / sizeof(
 
 关于json文本到C/C++ 字符串的转换，可以使用在线工具，如 [tomeko](https://tomeko.net/online_tools/cpp_text_escape.php)。
 
-**使用示例**
+#### 🧪示例
 
 ```c
 // 使用原版JSON
@@ -174,3 +194,13 @@ const char* compact_json = "..."; // 简化版JSON字符串
 motion_exec_json(&controller, compact_json);
 ```
 注意：两种格式可以混用，解析器会自动识别字段名。
+
+更多API接口请查看[robot_motion.h](include/robot_motion.h)
+## 🤝 贡献
+本项目采用 MIT 许可证📜，详情请参阅 [LICENSE](LICENSE) 文件。
+
+<p align="center">
+感谢您使用 ESP32 Robot Motion！🎉<br/>
+如果觉得项目不错，请给个 ⭐ Star 支持一下！
+</p>
+
