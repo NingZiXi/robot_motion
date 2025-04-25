@@ -8,4 +8,4 @@ files:
 dependencies:
   idf:
     version: ">=5.3.1"
-    espressif/servo: ^0.1.0
+  espressif/servo: ^0.1.0
