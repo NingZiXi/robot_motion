@@ -1,4 +1,42 @@
-# 机器人运动控制模块
+![alt text](image.jpg)
+<h1 align="center">🤖 ESP32 机器人运动控制组件</h1>
+
+<p align="center">
+一个让ESP32轻松控制多舵机运动的组件<br/>
+支持单舵机和多舵机并行控制<br/>
+提供平滑的运动曲线和动作序列功能
+</p>
+
+<p align="center">
+<a href="./README_EN.md">English</a>
+· 简体中文
+· <a href="https://github.com/NingZiXi/robot_motion/releases">更新日志</a>
+· <a href="https://github.com/NingZiXi/robot_motion/issues">反馈问题</a>
+</p>
+
+<p align="center">
+  <a href="LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg" />
+  </a>
+  <a href="https://docs.espressif.com/projects/esp-idf/">
+    <img alt="ESP-IDF" src="https://img.shields.io/badge/ESP32-ESP32S3-77216F?logo=espressif" />
+  </a>
+  <a href="https://docs.espressif.com/projects/esp-idf/">
+    <img alt="ESP-IDF" src="https://img.shields.io/badge/ESP--IDF-v5.3+-orange.svg" />
+  </a>
+  <a href="https://www.espressif.com/">
+    <img alt="ESP32" src="https://img.shields.io/badge/Platform-ESP32-green.svg" />
+  </a>
+  <a href="">
+    <img alt="Version" src="https://img.shields.io/badge/Version-v1.0.0-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/NingZiXi/robot_motion/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/NingZiXi/robot_motion.svg?style=social&label=Stars" />
+  </a>
+</p>
+
+---
+
 
 ## 快速开始
 
@@ -66,7 +104,7 @@ motion_exec_sequence(&controller, sequence_demo, sizeof(sequence_demo) / sizeof(
 ### 执行JSON动作序列
 
 #### 默认JSON格式 (详细字段名)
-```json
+```c
 {
   "motions": [
     {
@@ -88,7 +126,7 @@ motion_exec_sequence(&controller, sequence_demo, sizeof(sequence_demo) / sizeof(
 ```
 
 #### 简化版JSON格式 (短字段名)
-```json
+```c
 {
   "m": [
     {
